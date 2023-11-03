@@ -5,19 +5,18 @@ import time
 import pandas as pd
 import csv
 
-# firstly run "export CHROMEDRIVER=~/chromedriver" in terminal
+# firstly run "export CHROMEDRIVER=~/chromedriver" in terminal for linux.
 driver = webdriver.Chrome()
-user = "parul@bisresearch.com"
-password = "PRL#44559*66"
+user = "username"
+password = "password"
 
-profile_urls=[]
+profile_urls=[] #you can add linkedin URL directly in this list or read from Excel file
 
-#read profile urls from excel sheet
-df=pd.read_excel(io='/home/alija/Downloads/IM Experts Universal till 11Oct23.xlsx')
-for profile_URL in df['linkedin']:
+#read profile URLs from Excel sheet
+df=pd.read_excel(io='/path/to/excel_file.xlsx')
+for profile_URL in df['linkedin']: #linkedin is column name in excel sheet which store linkedin URLs
     if isinstance(profile_URL,str):
         profile_urls.append(profile_URL.strip())
-profile_urls = profile_urls[:15] 
   
 # linkedin login     
 def login():
@@ -84,25 +83,25 @@ def returnProfileInfo(url):
 def fetch_experts(URLs):
     try:    
         login()
-        time.sleep(18)
+        time.sleep(15)
         experts_data = []
         error_list=['profile_urls']
-        # for profile_url in URLs:
-        #     try:
-        #         details = returnProfileInfo(profile_url)
-        #         details['profile_url'] = profile_url
-        #         experts_data.append(details)
-        #         time.sleep(2)
-        #     except Exception as e:
-        #         error_list.append(profile_url)
-        #         print(e)
-        #         continue
-        # df = pd.DataFrame.from_dict(experts_data)
-        # df.to_excel('experts.xlsx')
-        # with open('error_urls.csv', 'w') as output:
-        #     writer = csv.writer(output)
-        #     for url in error_list:
-        #         writer.writerow([url])
+         for profile_url in URLs:
+             try:
+                 details = returnProfileInfo(profile_url)
+                 details['profile_url'] = profile_url
+                 experts_data.append(details)
+                 time.sleep(2)
+             except Exception as e:
+                 error_list.append(profile_url)
+                 print(e)
+                 continue
+         df = pd.DataFrame.from_dict(experts_data)
+         df.to_excel('experts.xlsx')
+         with open('error_urls.csv', 'w') as output:  #to store linkedin URLs in which error occured during scrapping
+             writer = csv.writer(output)
+             for url in error_list:
+                 writer.writerow([url])
     except Exception as e:
         print(e)
         
