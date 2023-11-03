@@ -21,9 +21,9 @@ This programme takes linked profile URL as input (list) and returns profile data
 4. # Export chrome driver
     for Linux execute command on terminal "export CHROMEDRIVER=~/chromedriver"
    
-5. # Provide user credentials (username, password) to variables
-    user = ""
-    password = ""
+5. # Provide user credentials for linkedin (username, password) to variables
+    user = "username"
+    password = "password"
    
 ## Now run programme file 
    # python linkedin_profile_scrapper.py
